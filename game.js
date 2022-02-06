@@ -6,6 +6,8 @@ let current_row = 0;
 let typed_word = "";
 let selected_word = "model";
 
+let selected_word_original = "";
+
 let won = false;
 
 // Cod pentru determinarea cuvantului de azi
@@ -29,7 +31,8 @@ function getWordOfTheDay(today) {
 }
 
 // Cuvantul de azi (fara diacritice)
-selected_word = removeDiacritics(getWordOfTheDay(new Date()));
+selected_word_original = getWordOfTheDay(new Date());
+selected_word = removeDiacritics(selected_word_original);
 //console.log(selected_word);
 
 // Adauga randurile
@@ -83,8 +86,13 @@ function keyPressed(key) {
 			if (current_row < 5) {
 				current_row += 1;
 				typed_word = "";
-			} else {
-				warning("Ai pierdut! Incerca si maine", true);
+			} else if (!won) {
+				warning(
+					"Ai pierdut! Cuvantul era " +
+						selected_word_original +
+						". Incerca si maine",
+					true,
+				);
 			}
 		}
 	} else if (isLetter(key)) {
