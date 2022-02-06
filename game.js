@@ -70,7 +70,7 @@ function keyPressed(key) {
 		if (typed_word.length == 5) {
 			// Vedem daca incercarea este un cuvant valid
 			if (!cuvinte.find((element) => typed_word == removeDiacritics(element))) {
-				warning("Cuvantul nu este in lista", false);
+				warning("Cuvantul nu este in lista", false, 0);
 				return;
 			}
 
@@ -80,7 +80,7 @@ function keyPressed(key) {
 
 			if (validation.match == "ccccc") {
 				won = true;
-				warning("Corect!", true);
+				warning("Corect!", true, 1000);
 			}
 
 			if (current_row < 5) {
@@ -92,6 +92,7 @@ function keyPressed(key) {
 						selected_word_original +
 						". Incerca si maine",
 					true,
+					1000,
 				);
 			}
 		}
@@ -163,18 +164,20 @@ function setCellColors(row_index, match) {
 
 	for (let index = 0; index < cells.length; index++) {
 		const cell = cells[index];
-		switch (match[index]) {
-			case "n": // Nowhere
-				cell.classList.add("cell-nowhere");
-				break;
+		setTimeout(() => {
+			switch (match[index]) {
+				case "n": // Nowhere
+					cell.classList.add("cell-nowhere");
+					break;
 
-			case "e": // Elsewhere
-				cell.classList.add("cell-elsewhere");
-				break;
-			case "c": // Correct
-				cell.classList.add("cell-correct");
-				break;
-		}
+				case "e": // Elsewhere
+					cell.classList.add("cell-elsewhere");
+					break;
+				case "c": // Correct
+					cell.classList.add("cell-correct");
+					break;
+			}
+		}, 300 * index);
 	}
 }
 
@@ -225,15 +228,17 @@ function getRow() {
 	return row;
 }
 
-function warning(text, permanent) {
-	label.textContent = text;
-	label.style.opacity = 1.0;
+function warning(text, permanent, delay) {
+	setTimeout(() => {
+		label.textContent = text;
+		label.style.opacity = 1.0;
 
-	if (!permanent) {
-		setTimeout(() => {
-			label.style.opacity = 0.0;
-		}, 2000);
-	}
+		if (!permanent) {
+			setTimeout(() => {
+				label.style.opacity = 0.0;
+			}, 2000);
+		}
+	}, delay);
 }
 
 // Misc
