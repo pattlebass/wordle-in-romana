@@ -8,7 +8,7 @@ let selected_word = "model";
 
 let selected_word_original = "";
 
-let won = false;
+let game_state = "in_progress";
 
 // Cod pentru determinarea cuvantului de azi
 // Este luat de aici: https://reichel.dev/blog/reverse-engineering-wordle.html
@@ -59,7 +59,7 @@ window.addEventListener("keydown", function (event) {
 });
 
 function keyPressed(key) {
-	if (won) return;
+	if (game_state != "in_progress") return;
 
 	key = key.toLowerCase();
 
@@ -79,14 +79,14 @@ function keyPressed(key) {
 			setKeyColors(validation.match_by_letters);
 
 			if (validation.match == "ccccc") {
-				won = true;
+				game_state = "won";
 				warning("Corect!", true, 1000);
 			}
 
 			if (current_row < 5) {
 				current_row += 1;
 				typed_word = "";
-			} else if (!won) {
+			} else if (game_state != "won") {
 				warning(
 					"Ai pierdut! Cuvantul era " +
 						selected_word_original +
@@ -94,6 +94,7 @@ function keyPressed(key) {
 					true,
 					1000,
 				);
+				game_state = "lost";
 			}
 		}
 	} else if (isLetter(key)) {
